@@ -5,6 +5,7 @@ import camerar from "./camera-rot.js";
 import bgcolor from "./bgcolor.js";
 import bgimage from "./bgimage.js";
 import clip from "./clip/init.js";
+import autoscale from "./autoscale.js";
 
 export default function setup(m) {
   pts( m );
@@ -14,4 +15,5 @@ export default function setup(m) {
   bgcolor( m );
   bgimage( m );
   clip( m );
+  autoscale( m );
 }
