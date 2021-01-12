@@ -6,6 +6,8 @@ import bgcolor from "./bgcolor.js";
 import bgimage from "./bgimage.js";
 import clip from "./clip/init.js";
 import autoscale from "./autoscale.js";
+import env1 from "./env1.js";
+import env2 from "./env2.js";
 
 export default function setup(m) {
   pts( m );
@@ -16,4 +18,6 @@ export default function setup(m) {
   bgimage( m );
   clip( m );
   autoscale( m );
+  env1( m );
+  env2( m );  
 }
