@@ -16,7 +16,8 @@ var planets = [
 "Mars_1_6792.glb",
 "Neptune_1_49528.glb",
 "Saturn_1_120536.glb",
-"Venus(surface)_1_12103.glb"
+"Venus(surface)_1_12103.glb",
+"Vesta_1_100.glb"
 ];
 
 function getplaneturl(i) {
