@@ -1,5 +1,8 @@
-// creates a nice 3d environment 1
+// creates a nice 3d environment 2
 // idea: put it around camera and not center?
+// idea: small movement in time.. same for env1
+// idea for env3: inside a planet (gltf model..), selectable by combo
+// idea for env4: a set of planets
 
 export default function setup( mv ) {
 

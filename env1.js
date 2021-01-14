@@ -26,6 +26,12 @@ function make( opts ) {
     pts.positions = arr;
   }
   
+  // another good variant:
+  // 0.49 0.7 0.84
+  // shape 3
+  // aditive 0
+  // radius 150
+  
   pts.setParam("color",[0.13,0.19,0.23] );
   pts.setParam("shape",4 );
   pts.setParam("additive",1);
