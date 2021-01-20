@@ -27,6 +27,8 @@ function make( opts ) {
   // https://threejsfundamentals.org/threejs/lessons/threejs-backgrounds.html
 
   function fixtex() {
+    if (!bgTexture) return;
+    
     // Set the repeat and offset properties of the background texture
     // to keep the image's aspect correct.
     // Note the image may not have loaded yet.
