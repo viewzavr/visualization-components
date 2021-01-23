@@ -14,6 +14,8 @@ function make(opts) {
     var r = mv.root.getParam("cliprange") || 1000;
     obj.addSlider( "p1",r/20.0,0,r,10, function() {});
     obj.addSlider( "p2",0.5,0,1,0.01, function() {} );
+    obj.setParamOption("p1","sliding",true );
+    obj.setParamOption("p2","sliding",true );
   }
   setsliders();
   
