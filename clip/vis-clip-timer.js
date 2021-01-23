@@ -2,6 +2,9 @@
 
 export default function setup( mv ) {
 
+//console.log("VIS_CLIP_TIMER setup called!");
+//debugger;
+
 function getClipRangeFromThreeJs() {
     // console.log("getcliprangefrom3");
     var r = 10; // minimum
@@ -33,5 +36,9 @@ function fn() {
 
 if (!mv.vis.clipTimer)
   mv.vis.clipTimer = setInterval( fn, 1000 );
+
+// this is not need to be dumped, so we set `internal` flag
+mv.root.setParamOption("cliprange","internal",true );
+//console.log("setted internal flag for cliprange");
 
 }
