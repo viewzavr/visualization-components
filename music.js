@@ -4,42 +4,25 @@
 
 export function create( vz, opts ) {
   var obj = vz.create_obj( {}, opts );
-  
-  var snd;
-  var starting;
-  obj.addCmd( "play/pause",function() {
+
+  obj.addCmd( "play/stop",function() {
     if (starting) return;
-    if (snd) {
-      snd.stop();
-      snd=undefined;
-    }
-    else {
-      starting = true;
-      var pos = obj.getParam("coords").split(/[\s,;]+/).map(parseFloat);
-      console.log("Starting music at coords ",pos );
-      vz.vis.playSound3d( pos, obj.getParam("file"), function(snd1) {
-        starting=false;
-        snd = snd1;
-        snd.setVolume( obj.getParam("volume")/100.0 );
-        snd.setRefDistance( obj.getParam("refdistance") );
-      }, 
-      function(snd) {
-        snd=undefined;
-        starting=false;
-      });
-    }
+
+    if (obj.isplaying())
+      obj.stop();
+    else 
+      obj.start();
   });
 
   obj.addCheckbox("autoplay",false,function() {
     if (obj.getParam("autoplay")) {
         setTimeout( function() {
-          obj.signalTracked("play/pause")
+          obj.play();
         },100 ); // timeout to reflect file change
     }  
   });
 
   obj.addFile("file","//viewlang.ru/assets/sounds/Maxim_Fadeev__Tiho_neset_voda.mp3",function(v) {
-
   });
   
   obj.addSlider( "volume",50,0,100,1,function(v) {
@@ -64,12 +47,59 @@ export function create( vz, opts ) {
       snd=undefined;
     }    
   });
+
+  obj.play = function() {
+    if (obj.isplaying()) return;
+    if (starting) return;
+
+    starting = true;
+    var pos = obj.getParam("coords").split(/[\s,;]+/).map(parseFloat);
+//      console.log("Starting music at coords ",pos );
+
+    vz.vis.playSound3d( pos, obj.getParam("file"), function(snd1) {
+        starting=false;
+        snd = snd1;
+        snd.setVolume( obj.getParam("volume")/100.0 );
+        snd.setRefDistance( obj.getParam("refdistance") );
+    },
+    function(snd) {
+      snd=undefined;
+      starting=false;
+    });
+
+  }
+
+  var snd;
+  var starting;
+  /* не готово по состояниям
+  obj.pause = function() {
+    if (!obj.isplaying()) return;
+    if (snd) snd.pause();
+  }
+  */
+
+  obj.stop = function() {
+    if (!obj.isplaying()) return;
+    if (snd) snd.stop();
+    snd = undefined;
+    starting = false;
+  }
+
+  obj.isplaying = function() {
+    if (starting) return true;
+    if (snd) return true;
+    return false;
+  }
+  
+  obj.isstarting = function() {
+    return starting;
+  }
   
   return obj;
 }
 
 export function setup( vz ) {
-  vz.addItemType( "music_coords","Music (coords) (reka)", function( opts ) {
+  vz.addItemType( "music_with_coords","Music (coords) (reka)", function( opts ) {
     return create( vz, opts );
   } );
 }

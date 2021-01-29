@@ -66,22 +66,31 @@ function download(data, filename, type) {
 function make(opts) {
   var obj = mv.create_obj( {}, opts );
 
-  var sl1 = obj.addCmd("Export",function(value) {
+  obj.addCmd("Export",function(value) {
     var s = mv.root.dump();
     var t  =JSON.stringify(s, null, '\t');
     download( t,"viewzavr-scene.json","text/plain" );
   });
   
-  var sl2= obj.addCmd("Import",function(value) {
+  // R-EXPORT-JS
+  obj.addCmd("Generate JS",function(value) {
+    var s = mv.root.dump();
+    var t = "// creates a scene\n// obj - a parent obj; you may pass vz.root here.\n\nfunction create( obj ) {\n" + json2js( "obj",s,"  " ) + "\n}\n";
+    // an idea to generate a function instead of just code is fine for making components
+    // because they need create function ;-)
+    download( t,"viewzavr-scene.js","text/plain" );
+  });
+  
+  obj.addCmd("Import",function(value) {
     load();
   });
   
-  var sl3 = obj.addCmd("Import as object",function(value) {
+  obj.addCmd("Import as object",function(value) {
     load( true );
   });
   
   
-  var sl3 = obj.addCmd("Reset",function(value) {
+  obj.addCmd("Reset",function(value) {
     mv.root.setup_from_dump( {} );
   });  
 
@@ -90,4 +99,41 @@ function make(opts) {
 
 mv.addItemType( "import-export","Import-export",make, {label:"special", guionce:true} );
 
+}
+
+
+// converts json viewzavr dump into js language
+// objname - a name of dump root object (probably vz.root by default)
+export function json2js( objname, dump,padding ) {
+    var result = "";
+
+    var h = dump.params || {};
+    var keys = Object.keys(h);
+
+    keys.forEach( function(name) {
+      result += `${objname}.setParam( '${name}', '${h[name]}' );\n`;
+    });
+
+    var c = dump.children || {};
+    var ckeys = Object.keys( c );
+
+    // todo отсортировать в порядке order..
+    ckeys.forEach( function(name) {
+      var cobjname = objname + "_" + name;
+      
+      result += `\n // object ${cobjname}\n`;
+      cobjname = cobjname.replace(/[^\d\w]/,"_").replace("-","_");
+      if (c[name].manual) 
+      {
+        result += `var ${cobjname} = ${objname}.vz.create_obj_by_type( { type: '${c[name].type}', parent: ${objname}, name: '${name}', manual: true } );\n`;
+      }
+      else
+      {
+        result += `var ${cobjname} = ${objname}.ns.getChildByName('${name}');\n`;
+      }
+      result += json2js( cobjname, c[name],padding );
+    });
+    
+
+   return result.split("\n").map( s => padding+s ).join("\n");
 }
