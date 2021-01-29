@@ -9,6 +9,7 @@ import autoscale from "./autoscale.js";
 import env1 from "./env1.js";
 import env2 from "./env2.js";
 import env3 from "./env3.js";
+import * as mus from "./music.js";
 
 export default function setup(m) {
   pts( m );
@@ -22,4 +23,5 @@ export default function setup(m) {
   env1( m );
   env2( m );
   env3( m );
+  mus.setup( m );
 }
