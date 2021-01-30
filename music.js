@@ -1,6 +1,7 @@
 // plays a positional audio
 
 // todo: add many files, play sequentally, shuffled, or one random (add mode for this).
+// idea: add visual body, probably osciallating, activated by checkbox? or is it another component?
 
 export function create( vz, opts ) {
   var obj = vz.create_obj( {}, opts );
@@ -11,7 +12,7 @@ export function create( vz, opts ) {
     if (obj.isplaying())
       obj.stop();
     else 
-      obj.start();
+      obj.play();
   });
 
   obj.addCheckbox("autoplay",false,function() {

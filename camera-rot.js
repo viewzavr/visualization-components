@@ -40,7 +40,7 @@ function make(opts) {
   }
   
   
-  var aps = obj.addSlider("auto-rotate",0,-1,+1,0.01,function(value) {
+  var aps = obj.addSlider("auto-rotate",0,-0.1,+0.1,0.01,function(value) {
     aval( value );
   });
   

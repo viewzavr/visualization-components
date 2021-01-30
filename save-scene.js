@@ -33,12 +33,16 @@ input.onchange = e => {
       //console.log( content );
       var d = JSON.parse( content );
       
-      if (!plus)
-        mv.root.setup_from_dump( d );
+      if (!plus) {
+        vzPlayer.setRoot( mv.createSyncFromDump( d, vzPlayer.getRoot() ) );
+        //mv.root.setup_from_dump( d );
+      }
       else {
+        mv.createSyncFromDump( d,undefined,vzPlayer.getRoot() );
         console.log("loading to new");
-        var newobj = mv.create_obj( {}, {manual: true } );
-        newobj.setup_from_dump( d );
+        //var newobj = mv.create_obj( {}, {manual: true } );
+        //newobj.setup_from_dump( d );
+        //
       }
    }
 
@@ -67,19 +71,49 @@ function make(opts) {
   var obj = mv.create_obj( {}, opts );
 
   obj.addCmd("Export",function(value) {
-    var s = mv.root.dump();
+    var root = mv.find_root( obj );  
+    var s = root.dump();
     var t  =JSON.stringify(s, null, '\t');
     download( t,"viewzavr-scene.json","text/plain" );
   });
   
   // R-EXPORT-JS
-  obj.addCmd("Generate JS",function(value) {
-    var s = mv.root.dump();
-    var t = "// creates a scene\n// obj - a parent obj; you may pass vz.root here.\n\nfunction create( obj ) {\n" + json2js( "obj",s,"  " ) + "\n}\n";
+/* seems no need  
+  obj.addCmd("Export JS",function(value) {
+    var root = mv.find_root( obj );  
+    var s = root.dump();
+    //var t = "// creates a scene\n// obj - a parent obj; you may pass vz.root here.\n\nfunction create( obj ) {\n" + json2js( "obj",s,"  " ) + "\n   return obj;\n}\n";
+    var t = `// viewzavr scene generated on ${new Date().toString()}\nvar obj = vz.root;\n` + json2js( "obj",s,"  " );
     // an idea to generate a function instead of just code is fine for making components
     // because they need create function ;-)
     download( t,"viewzavr-scene.js","text/plain" );
   });
+*/  
+  
+  // R-EXPORT-JS-MODULE
+  obj.addCmd("Generate Viewzavr module",function(value) {
+    var root = mv.find_root( obj );
+    var s = root.dump();
+    var t = `// viewzavr module generated on ${new Date().toString()}
+// the module may contain a list of components, 0 or more.
+
+// here we add record to a table of visual components, used by visual interface
+export function setup( vz ) {
+  vz.addItemType( "my-test-component-type-id","My test component", function( opts ) {
+    return create( vz, opts );
+  } );
+  // you may add many components in 1 module
+}
+
+// the component code usable right from js
+export function create( vz, opts ) {
+  var obj = vz.create_obj( {}, opts );
+`
+    t += json2js( "obj",s,"  " ) + "\n   return obj;\n}\n";
+    // an idea to generate a function instead of just code is fine for making components
+    // because they need create function ;-)
+    download( t,"viewzavr-module.js","text/plain" );
+  });  
   
   obj.addCmd("Import",function(value) {
     load();
@@ -91,7 +125,13 @@ function make(opts) {
   
   
   obj.addCmd("Reset",function(value) {
-    mv.root.setup_from_dump( {} );
+    vzPlayer.setRoot( mv.createSyncFromDump( {}, vzPlayer.getRoot() ) );
+    /*
+    var new_root = mv.createObj();
+    var old_root = vzPlayer.getRoot();
+    vzPlayer.setRoot( new_root );
+    old_root.remove();
+    */
   });  
 
   return obj; // ну то есть я пока не понял, хочу я вообще что-то возвращать или нет
@@ -111,7 +151,8 @@ export function json2js( objname, dump,padding ) {
     var keys = Object.keys(h);
 
     keys.forEach( function(name) {
-      result += `${objname}.setParam( '${name}', '${h[name]}' );\n`;
+      var v = JSON.stringify( h[name] );
+      result += `${objname}.setParam( '${name}', ${v} );\n`;
     });
 
     var c = dump.children || {};
@@ -125,7 +166,7 @@ export function json2js( objname, dump,padding ) {
       cobjname = cobjname.replace(/[^\d\w]/,"_").replace("-","_");
       if (c[name].manual) 
       {
-        result += `var ${cobjname} = ${objname}.vz.create_obj_by_type( { type: '${c[name].type}', parent: ${objname}, name: '${name}', manual: true } );\n`;
+        result += `var ${cobjname} = ${objname}.vz.create_obj_by_type( { type: '${c[name].type}', parent: ${objname}, name: '${name}' } );\n`;
       }
       else
       {
