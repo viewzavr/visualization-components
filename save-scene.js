@@ -94,12 +94,26 @@ function make(opts) {
   obj.addCmd("Generate Viewzavr module",function(value) {
     var root = mv.find_root( obj );
     var s = root.dump();
+    
+
+    
+    var d = new Date();
+    var new_type_id = "component-"+ Math.floor(Math.random()*1000000).toString();
+    //d.getDate()  + "-" + (d.getMonth()+1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes();
+    
     var t = `// viewzavr module generated on ${new Date().toString()}
 // the module may contain a list of components, 0 or more.
+`
+    
+    //debugger;
+    if (s.module_url) {
+      t += `\nimport * as m1 from '${s.module_url}';\n`
+    }
 
+   t +=`
 // here we add record to a table of visual components, used by visual interface
 export function setup( vz ) {
-  vz.addItemType( "my-test-component-type-id","My test component", function( opts ) {
+  vz.addItemType( "${new_type_id}","My ${new_type_id}", function( opts ) {
     return create( vz, opts );
   } );
   // you may add many components in 1 module
@@ -107,9 +121,8 @@ export function setup( vz ) {
 
 // the component code usable right from js
 export function create( vz, opts ) {
-  var obj = vz.create_obj( {}, opts );
 `
-    t += json2js( "obj",s,"  " ) + "\n   return obj;\n}\n";
+    t += json2js_v2( s.name||"scene","obj", "opts.parent",s,"  " ) + "\n  return obj;\n}\n";
     // an idea to generate a function instead of just code is fine for making components
     // because they need create function ;-)
     download( t,"viewzavr-module.js","text/plain" );
@@ -173,6 +186,48 @@ export function json2js( objname, dump,padding ) {
         result += `var ${cobjname} = ${objname}.ns.getChildByName('${name}');\n`;
       }
       result += json2js( cobjname, c[name],padding );
+    });
+    
+
+   return result.split("\n").map( s => padding+s ).join("\n");
+}
+
+// converts json viewzavr dump into js language
+// objname - a name of dump root object (probably vz.root by default)
+
+export function json2js_v2( objname, objvarname, parentvarname, dump, padding ) {
+    var result = `// object ${objname}\n`;
+
+    objvarname = objvarname.replace(/[^\d\w]/,"_").replace("-","_");
+    
+    if (dump.module_url)
+    {
+      result += `var ${objvarname} = m1.create( vz, opts );\n`
+    }
+    else
+    if (dump.manual)
+    {
+      result += `var ${objvarname} = vz.create_obj_by_type( { type: '${dump.type}', parent: ${parentvarname}, name: '${objname}' } );\n`;
+    }
+    else
+    {
+      result += `var ${objvarname} = ${parentvarname}.ns.getChildByName('${objname}');\n`;
+    }
+
+    var h = dump.params || {};
+    var keys = Object.keys(h);
+
+    keys.forEach( function(name) {
+      var v = JSON.stringify( h[name] );
+      result += `${objvarname}.setParam( '${name}', ${v} );\n`;
+    });
+
+    var c = dump.children || {};
+    var ckeys = Object.keys( c );
+
+    // todo отсортировать в порядке order..
+    ckeys.forEach( function(name) {
+      result += "\n" + json2js_v2( name, objvarname + "_" + name, objvarname, c[name],padding);
     });
     
 
