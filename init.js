@@ -1,6 +1,5 @@
 import pts from "./pointes-cube.js";
 import lins from "./lineas-cube.js";
-import sav from "./save-scene.js";
 import camerar from "./camera-rot.js";
 import bgcolor from "./bgcolor.js";
 import bgimage from "./bgimage.js";
@@ -14,7 +13,6 @@ import * as mus from "./music.js";
 export default function setup(m) {
   pts( m );
   lins( m );
-  sav( m );
   camerar( m );
   bgcolor( m );
   bgimage( m );

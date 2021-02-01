@@ -24,11 +24,11 @@ function getplaneturl(i) {
   return "https://viewlang.ru/assets/planets/"+planets[i];
 }
 
-export default function setup( mv ) {
+export default function setup( vz ) {
 
 function make( opts ) {
 
-  var obj = mv.create_obj( {}, opts );
+  var obj = vz.create_obj( {}, opts );
   var gltf = vz.vis.addGltf( obj, "item" );
   
   // todo check assigned? or in gltf?
@@ -57,6 +57,6 @@ function make( opts ) {
   return obj;
 }
 
-mv.addItemType( "env3","Background Env 3 (planets)",make );
+vz.addItemType( "env3","Background Env 3 (planets)",make );
 
 }
