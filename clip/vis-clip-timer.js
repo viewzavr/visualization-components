@@ -1,6 +1,6 @@
 // предназначение - обновлять по таймеру размеры сцены и запиывать их в параметр root.cliprange
 
-export default function setup( mv ) {
+export default function setup( root ) {
 
 //console.log("VIS_CLIP_TIMER setup called!");
 //debugger;
@@ -29,16 +29,16 @@ function fn() {
   //console.log("rrr=",r);
   if (r0 != r) {
     r0 = r;
-    mv.root.setParam("cliprange",r);
+    root.setParam("cliprange",r);
   }
   // todo set default value too - чтобы не сохранять лишний раз
 }
 
-if (!mv.vis.clipTimer)
-  mv.vis.clipTimer = setInterval( fn, 1000 );
+if (!root.clipTimer)
+  root.clipTimer = setInterval( fn, 1000 );
 
 // this is not need to be dumped, so we set `internal` flag
-mv.root.setParamOption("cliprange","internal",true );
+root.setParamOption("cliprange","internal",true );
 //console.log("setted internal flag for cliprange");
 
 }

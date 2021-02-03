@@ -11,13 +11,14 @@ function addpt(v) {
 
 function make(opts) {
   var obj = mv.create_obj( {}, opts );
+  var clipr_obj = mv.find_root(obj);
   
   var shader = mv.vis.addShader( obj );
   shader.fragmentOver = true;
   shader.followParams( obj, "p1" );
   
   function cliprangec() {
-    var r = mv.root.getParam("cliprange") || 1000;
+    var r = clipr_obj.getParam("cliprange") || 1000;
     obj.addSlider( "p1",r/500.0, 0, r/20.0, 1.0, regen );
     obj.setParamOption("p1","sliding",true );
   }
@@ -46,14 +47,14 @@ void main()
   
   
   // вот так я странно делаю..
-  import( "./vis-clip-timer.js").then(module => { module.default(mv); });
+  import( "./vis-clip-timer.js").then(module => { module.default( clipr_obj ); });
   // todo mv.load( ...... ) + setup оно само вызовет? ну а что? удобно жеж.. 
   
-  mv.root.trackParam("cliprange",cliprangec )
+  clipr_obj.trackParam("cliprange",cliprangec )
 
   var oremove = obj.remove;
   obj.remove = function() {
-    mv.root.untrackParam( "cliprange",cliprangec );
+    clipr_obj.untrackParam( "cliprange",cliprangec );
     if (oremove) oremove();
   }
 

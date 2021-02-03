@@ -8,11 +8,12 @@ function make(opts) {
   qcounter=qcounter+1;
   
   var obj = mv.create_obj( {}, opts );
+  var clipr_obj = mv.find_root(obj);
 
   /////////////////
   function setsliders() {
-    var r = mv.root.getParam("cliprange") || 1000;
-    obj.addSlider( "p1",r/20.0,0,r,10, function() {});
+    var r = clipr_obj.getParam("cliprange") || 1000;
+    obj.addSlider( "p1",r/20.0,0,r, 0.1, function() {});
     obj.addSlider( "p2",0.5,0,1,0.01, function() {} );
     obj.setParamOption("p1","sliding",true );
     obj.setParamOption("p2","sliding",true );
@@ -63,17 +64,17 @@ function make(opts) {
   // вот так я странно делаю..
 
   import( "./vis-clip-timer.js").then(module => { 
-    module.default(mv); 
+    module.default(clipr_obj); 
   });
 
-  var q = mv.root.trackParam("cliprange", function() {
+  var q = clipr_obj.trackParam("cliprange", function() {
     //console.log("see clip change", mv.root.getParam("cliprange") );
     setsliders();
   });
   
   var oremove = obj.remove;
   obj.remove = function() {
-    mv.root.untrackParam( "cliprange",q );
+    clipr_obj.untrackParam( "cliprange",q );
     if (oremove) oremove();
   }
 

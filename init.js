@@ -10,7 +10,7 @@ import env2 from "./env2.js";
 import env3 from "./env3.js";
 import * as mus from "./music.js";
 
-export default function setup(m) {
+export function setup(m) {
   pts( m );
   lins( m );
   camerar( m );
