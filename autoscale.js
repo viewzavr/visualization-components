@@ -8,6 +8,7 @@ export default function setup( mv ) {
 function make(opts) {
 
   var obj = mv.create_obj( {}, opts );
+  var clipr_obj = mv.find_root(obj);
 
   /////////////////
 
@@ -16,7 +17,7 @@ function make(opts) {
   shader.followParams( obj, "scale" );
   obj.addSlider( "scale",1,0.0001,5,0.01, function() {});
   obj.addCmd("Auto-scale",function() {
-    var r = mv.root.getParam("cliprange") || 1000;
+    var r = clipr_obj.getParam("cliprange") || 1000;
     obj.setParam( "scale", 50 / r );
   });
 
@@ -34,8 +35,9 @@ function make(opts) {
         }
        `
 
+  
   import( "./clip/vis-clip-timer.js").then(module => { 
-    module.default(mv); 
+    module.default( clipr_obj );
   });
 
   return obj; // ну то есть я пока не понял, хочу я вообще что-то возвращать или нет
