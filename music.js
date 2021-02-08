@@ -46,7 +46,9 @@ export function create( vz, opts ) {
     if (snd) {
       snd.stop();
       snd=undefined;
-    }    
+    }
+    this.orig();
+    
   });
 
   obj.play = function() {
