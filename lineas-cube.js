@@ -11,7 +11,7 @@ function make( opts ) {
   var regen = function() {
     var arr = [];
     for (var i=0; i<pts_count*3; i++) {
-      arr.push( Math.random()*100 );
+      arr.push( (Math.random()-0.5)*100 );
     }
     //console.log("setting positions",arr);
     pts.positions = arr;
