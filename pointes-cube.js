@@ -31,6 +31,6 @@ function make( opts ) {
   return obj;
 }
 
-mv.addItemType( "pointes-cube","Points cube",make );
+mv.addItemType( "pointes-cube","Points cube",make,{cat:"examples"}  );
 
 }

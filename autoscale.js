@@ -43,6 +43,6 @@ function make(opts) {
   return obj; // ну то есть я пока не понял, хочу я вообще что-то возвращать или нет
 }
 
-mv.addItemType( "auto_scale","Autoscale",make, {label: "extra",title_ru: "Автомасштаб"} );
+mv.addItemType( "auto_scale","Autoscale",make, {label: "extra",title_ru: "Автомасштаб", cat: "camera"} );
 
 }

@@ -64,7 +64,8 @@ function make(opts) {
 mv.addItemType( "cameraZ","Camera rotate",make, {
   label:"extra",
   guionce:true,
-  title_ru: "Поворот камеры"
+  title_ru: "Поворот камеры",
+  cat: "camera"
 } );
 
 }

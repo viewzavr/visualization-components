@@ -57,6 +57,6 @@ function make( opts ) {
   return obj;
 }
 
-vz.addItemType( "env3","Background Env 3 (planets)",make );
+vz.addItemType( "env3","Background Env 3 (planets)",make,{cat: "background"} );
 
 }

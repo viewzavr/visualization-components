@@ -61,6 +61,6 @@ void main()
   return obj;
 }
 
-mv.addItemType( "clip_color","Clip edges hilite",make, {label: "extra", title_ru: "Края сечений"} );
+mv.addItemType( "clip_color","Clip edges hilite",make, {label: "extra", title_ru: "Края сечений", cat: "clip"} );
 
 }

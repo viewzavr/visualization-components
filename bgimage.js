@@ -55,6 +55,6 @@ function make( opts ) {
   return obj;
 }
 
-mv.addItemType( "bgimage","Background image",make, {label: "visual", guionce: true, title_ru: "Фоновая картинка"} );
+mv.addItemType( "bgimage","Background image",make, {label: "visual", guionce: true, title_ru: "Фоновая картинка", cat: "background" } );
 
 }
