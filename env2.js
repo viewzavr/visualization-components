@@ -70,6 +70,6 @@ function make( opts ) {
   return obj;
 }
 
-mv.addItemType( "env2","Background Env 2",make );
+mv.addItemType( "env2","Background Env 2",make,{cat: "background"} );
 
 }

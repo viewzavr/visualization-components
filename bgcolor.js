@@ -16,6 +16,6 @@ function make( opts ) {
   return obj;
 }
 
-mv.addItemType( "bgcolor","Background color",make, {label: "visual", guionce: true, title_ru: "Цвет фона"} );
+mv.addItemType( "bgcolor","Background color",make, {label: "visual", guionce: true, title_ru: "Цвет фона", cat: "background"} );
 
 }

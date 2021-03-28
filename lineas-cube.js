@@ -32,6 +32,6 @@ function make( opts ) {
   return obj;
 }
 
-mv.addItemType( "lineas-cube","Lines cube",make );
+mv.addItemType( "lineas-cube","Lines cube",make, {cat:"examples"} );
 
 }

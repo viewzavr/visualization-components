@@ -104,5 +104,5 @@ export function create( vz, opts ) {
 export function setup( vz ) {
   vz.addItemType( "music_with_coords","Music (coords) (reka)", function( opts ) {
     return create( vz, opts );
-  } );
+  }, { cat: "music" } );
 }

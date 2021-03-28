@@ -90,8 +90,8 @@ function make(opts) {
   return obj; // ну то есть я пока не понял, хочу я вообще что-то возвращать или нет
 }
 
-mv.addItemType( "clip_x","Clip X",make, {label: "extra",title_ru: "Отсечение X"} );
-mv.addItemType( "clip_y","Clip Y",make, {label: "extra",title_ru: "Отсечение Y"} );
-mv.addItemType( "clip_z","Clip Z",make, {label: "extra",title_ru: "Отсечение Z"} );
+mv.addItemType( "clip_x","Clip X",make, {label: "extra",title_ru: "Отсечение X", cat: "clip" } );
+mv.addItemType( "clip_y","Clip Y",make, {label: "extra",title_ru: "Отсечение Y", cat: "clip" } );
+mv.addItemType( "clip_z","Clip Z",make, {label: "extra",title_ru: "Отсечение Z", cat: "clip" } );
 
 }
