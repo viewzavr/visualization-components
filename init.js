@@ -10,6 +10,8 @@ import env2 from "./env2.js";
 import env3 from "./env3.js";
 import * as mus from "./music.js";
 
+import pts2 from "./visual/points.js";
+
 export function setup(m) {
   pts( m );
   lins( m );
@@ -22,4 +24,6 @@ export function setup(m) {
   env2( m );
   env3( m );
   mus.setup( m );
+  
+  pts2( m );
 }
