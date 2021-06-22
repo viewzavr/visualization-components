@@ -1,4 +1,6 @@
 // camera rotation around axis
+// uses orbitControl@treejs tied with Viewlang
+// todo: manipulate camera object from player.
 
 export default function setup(mv) {
 
