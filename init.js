@@ -9,8 +9,9 @@ import env1 from "./env1.js";
 import env2 from "./env2.js";
 import env3 from "./env3.js";
 import * as mus from "./music.js";
+import recorder1 from "./recorder-1/recorder.js";
 
-import pts2 from "./visual/points.js";
+import basis from "./visual/basis.js";
 
 export function setup(m) {
   pts( m );
@@ -25,5 +26,7 @@ export function setup(m) {
   env3( m );
   mus.setup( m );
   
-  pts2( m );
+  basis( m );
+  
+  recorder1( m );
 }

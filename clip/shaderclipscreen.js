@@ -14,6 +14,7 @@ function make(opts) {
   /////////////////
   function setsliders() {
     var r = clipr_obj.getParam("cliprange") || 1000;
+    //r = r*2;
     
     obj.addSlider( "p1",-r,-r,r, 0.1, function() {});
     obj.addSlider( "p2",2*r,0,2*r, 0.1, function() {});
