@@ -45,4 +45,5 @@ function add_std( obj ) {
   obj.addCheckbox("visible",true,(v) => {
     obj.visible=v;
   });
+
 }
