@@ -10,6 +10,16 @@ export default function setup( vz ) {
 // create function should return Viewzavr object
 export function create( vz, opts ) {
   var obj = vz.createObj( opts );
+
+  var playerCamera = vz.createObjByType( "camera", {parent: obj});
+  var link = playerCamera.linkParam("cameraInfo","..->curpostarget");
+  //link.setParam("enabled",false);
+  //obj.addParamMirror
+
+  obj.addCheckbox("manage_camera",false,(v) => {
+    link.setParam("enabled",v);
+  })
+
 //  var pts = vz.vis.addPoints( obj,"points" );
 //  var lines = vz.vis.addPoints( obj,"lines" );
 //  var spcur = vz.vis.addPoints( obj,"point_cur" );
@@ -21,7 +31,7 @@ export function create( vz, opts ) {
     var arr = parse_arr( v );
     res = import_program( arr );
     // в секундах
-    obj.addSlider( "T", obj.params.T || 0,0, res.getTimeLen(),0.01 );
+    obj.addSlider( "T", obj.params.T || 0,0, res.getTimeLen(),5 );
     // obj.addSlider( "pseudoT", obj.params.pseudoT || 0,0, res.getTimeLen(),0.1 );
     
     obj.setParam( "positions", res.getRecords().map( r => r.slice( 0,3 ) ).flat(5) );
@@ -44,9 +54,10 @@ export function create( vz, opts ) {
   // но формально нужны галочки - если мы в режиме полета то вот, а если нет то нет
   
   obj.addCmd("add-current",() => {
-    var arr = [1].concat( qmlEngine.rootObject.cameraPos.concat( qmlEngine.rootObject.cameraCenter ) );
-    var str = arr.map( v => v.toString() ).join(" ");
-    obj.setParam( "track", obj.params.track + "\n" + str );
+    //var arr = [1].concat( qmlEngine.rootObject.cameraPos.concat( qmlEngine.rootObject.cameraCenter ) );
+    var arr = playerCamera.params.cameraInfo;
+    var str = "100 " + arr.map( v => v.toString() ).join(" ");
+    obj.setParam( "track", obj.params.track + "\n" + str, true );
   });
 
   return obj;
