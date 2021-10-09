@@ -10,7 +10,7 @@ var timer = null;
 function make(opts) {
   var obj = mv.create_obj( {}, opts );
   
-  var orbitControl = qmlEngine.rootObject.cameraControlC.sceneControl;
+  var orbitControl = qmlEngine.rootObject.scene3d.cameraControlC.sceneControl;
   
   var sl1 = obj.addSlider("teta-angle",0,-1,360,0.01,function(value) {
     orbitControl.manualTheta = value < 0 || value == null || isNaN(value) ? undefined : 2*Math.PI * value / 360.0;
