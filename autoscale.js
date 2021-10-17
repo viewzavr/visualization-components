@@ -14,24 +14,24 @@ function make(opts) {
 
   var shader = mv.vis.addShader( obj );
 
-  shader.followParams( obj, "scale" );
-  obj.addSlider( "scale",1,0.0001,5,0.01, function() {});
+  obj.addSlider( "scale_coef",1,0.0001,5,0.01, function() {});
+  shader.followParams( obj, "scale_coef" );
+
   obj.addCmd("Auto-scale",function() {
     var r = clipr_obj.getParam("cliprange") || 1000;
-    obj.setParam( "scale", 50 / r );
+    obj.setParam( "scale_coef", 50 / r );
   });
 
   ////////////////
 
   shader.vertex = `
-        // your things
         uniform float sceneTime;
-        uniform float scale;
+        uniform float scale_coef;
         void main()
         {
-          gl_Position.x = gl_Position.x *scale;
-          gl_Position.y = gl_Position.y *scale;
-          gl_Position.z = gl_Position.z *scale;
+          gl_Position.x = gl_Position.x *scale_coef;
+          gl_Position.y = gl_Position.y *scale_coef;
+          gl_Position.z = gl_Position.z *scale_coef;
         }
        `
 
