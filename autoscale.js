@@ -19,7 +19,7 @@ function make(opts) {
 
   obj.addCmd("Auto-scale",function() {
     var r = clipr_obj.getParam("cliprange") || 1000;
-    obj.setParam( "scale_coef", 50 / r );
+    obj.setParam( "scale_coef", 50 / r, true ); // true = manual
   });
 
   ////////////////
