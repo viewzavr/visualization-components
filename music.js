@@ -6,6 +6,8 @@
 export function create( vz, opts ) {
   var obj = vz.create_obj( {}, opts );
 
+  obj.feature("enabled");
+
   obj.addCmd( "play/stop",function() {
     if (starting) return;
 
@@ -97,6 +99,17 @@ export function create( vz, opts ) {
   obj.isstarting = function() {
     return starting;
   }
+
+  obj.trackParam("enabled",(v) => {
+     if (v)
+       obj.play();
+     else
+       obj.stop();
+  });
+
+  // разово попробовать запуститься на старте
+  obj.feature("timers");
+  obj.setTimeout( () => { obj.signalParam("enabled"); }, 50 );
   
   return obj;
 }

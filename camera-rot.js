@@ -5,37 +5,38 @@
 export default function setup(mv) {
 
 var intervalDur=15;
-var timer = null;
+var timer_rm = ()=>{};
 
 function make(opts) {
   var obj = mv.create_obj( {}, opts );
+  obj.feature("enabled timers");
+  obj.trackParam("enabled",aval)
   
   var orbitControl = qmlEngine.rootObject.scene3d.cameraControlC.sceneControl;
   
   var sl1 = obj.addSlider("teta-angle",0,-1,360,0.01,function(value) {
     orbitControl.manualTheta = value < 0 || value == null || isNaN(value) ? undefined : 2*Math.PI * value / 360.0;
     orbitControl.update();
-    if (!timer) {
+    if (!obj.params.enabled) {
       orbitControl.manualTheta = undefined;
       orbitControl.update();
     }
   });
   
   // синхронизирует процесс таймера и потребность на него, что определяется ненулевым значением value
-  function aval( value ) {
-      if (value != 0) {
+  function aval() {
+    if (obj.params.enabled) {
       orbitControl.update();
-      if (!timer)
-        timer = setInterval( function() {
+      timer_rm();
+      timer_rm = obj.setInterval( function() {
           var dt = aps.value;
           var newangle = ((sl1.value + dt)%360 + 360)%360;
           sl1.setValue( newangle );
-        }, intervalDur );
+      }, intervalDur );
     }
     else
     {
-      if (timer) clearInterval( timer );
-      timer=null;
+      timer_rm(); timer_rm = () => {};
       orbitControl.manualTheta = undefined;
       orbitControl.update();
     }
@@ -43,22 +44,15 @@ function make(opts) {
   
   
   var aps = obj.addSlider("auto-rotate",0,-0.1,+0.1,0.01,function(value) {
-    aval( value );
+    aval();
   });
   
+  obj.addCmd( "start",function() {
+    obj.setParam("enabled",true);
+  });
   obj.addCmd( "stop",function() {
-    // вот мы тут капитально видимо что надо чтобы setParam и addSlider были бы одного уровня вещи
-    // TODO
-    aps.setValue( 0 );
-    aval( 0 );
-  });
-  
-  var oremove = obj.remove;
-  //obj.remove = mv.chain( obj.remove, function() {
-  obj.remove = function() {
-    aval( 0 );
-    if (oremove) oremove();
-  }
+    obj.setParam("enabled",false);
+  });  
 
   return obj; // ну то есть я пока не понял, хочу я вообще что-то возвращать или нет
 }
