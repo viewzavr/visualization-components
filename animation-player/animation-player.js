@@ -1,3 +1,5 @@
+// todo parameter animation - правильное название
+
 export default function setup( vz, m ) {
   vz.register_feature( "animation-player", animation_player );
   vz.addType( "animation-player", (vz,opts)=>vz.createObj(opts), { title: "Animation player", cats: "animation"})
@@ -15,7 +17,8 @@ export function animation_player( obj, opts )
     // здесь param_path это строковая ссылка
     updateminmax();
   }, root )
-  //obj.addCmd("update min-max",updateminmax);
+  //obj.setParamOption("parameter","title","Choose parameter")
+  obj.addCmd("update min-max",updateminmax);
   obj.addFloat( "start_value",0 );
   obj.addFloat( "min",0 );
   obj.addFloat( "max",1 );
@@ -49,17 +52,19 @@ export function animation_player( obj, opts )
     return acc;
   }
 
+  var updateminmax_pending = false;
   function updateminmax() {
     if (!obj.params.parameter) return;
     var [tobj,tparam] = obj.params.parameter.split("->");
     tobj = root.findByPath( tobj );
-    if (!tobj) return;
+    if (!tobj) { updateminmax_pending = true; return; }
+
     var g = tobj.getGui( tparam );
     if (g) {
-      obj.setParam( "min", g.min || 0 );
-      obj.setParam( "max", g.max || 1 );
-      obj.setParam( "step", g.step || 1 );
-      obj.setParam( "start_value", tobj.getParam(tparam) );
+      obj.setParam( "min", g.min || 0,true );
+      obj.setParam( "max", g.max || 1,true );
+      obj.setParam( "step", g.step || 1,true );
+      obj.setParam( "start_value", tobj.getParam(tparam),true );
     }
 
 /*
@@ -90,11 +95,18 @@ export function animation_player( obj, opts )
     if (!tobj) return;
 
     var value = tobj.getParam( tparam );
+    if (!isFinite(value)) value = obj.params.start_value;
+
     var nv = value + obj.params.step;
     if (nv > obj.params.max) nv = obj.params.min;
+    if (nv < obj.params.min) nv = obj.params.max;
 
-    if (need_restart) { need_restart=false; nv = obj.params.min; }
+    if (need_restart) { need_restart=false; nv = obj.params.start_value; }
 
     tobj.setParam( tparam, nv );
  }
+
+  obj.on("remove",() => {
+    obj.setParam("enabled",false);
+  })
 }
