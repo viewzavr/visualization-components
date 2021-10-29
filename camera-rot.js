@@ -62,6 +62,12 @@ function make(opts) {
     obj.setParam("enabled",false);
   });  
 
+  obj.on("remove",() => {
+    var orbitControl = getcontrol();
+    orbitControl.manualTheta = undefined;
+    orbitControl.update();
+  })
+
   return obj; // ну то есть я пока не понял, хочу я вообще что-то возвращать или нет
 }
 

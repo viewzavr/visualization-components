@@ -10,6 +10,7 @@ import env2 from "./env2.js";
 import env3 from "./env3.js";
 import * as mus from "./music.js";
 import recorder1 from "./recorder-1/recorder.js";
+import player1 from "./animation-player/animation-player.js";
 
 import basis from "./visual/basis.js";
 
@@ -29,4 +30,5 @@ export function setup(m) {
   basis( m );
   
   recorder1( m );
+  player1( m );
 }

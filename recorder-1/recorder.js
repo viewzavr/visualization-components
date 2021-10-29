@@ -31,7 +31,7 @@ export function create( vz, opts ) {
     var arr = parse_arr( v );
     res = import_program( arr );
     // в секундах
-    obj.addSlider( "T", obj.params.T || 0,0, res.getTimeLen(),5 );
+    obj.addSlider( "T", obj.params.T || 0,0, res.getTimeLen(),1 );
     // obj.addSlider( "pseudoT", obj.params.pseudoT || 0,0, res.getTimeLen(),0.1 );
     
     obj.setParam( "positions", res.getRecords().map( r => r.slice( 0,3 ) ).flat(5) );
