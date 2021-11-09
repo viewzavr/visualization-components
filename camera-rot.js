@@ -71,11 +71,10 @@ function make(opts) {
   return obj; // ну то есть я пока не понял, хочу я вообще что-то возвращать или нет
 }
 
-mv.addItemType( "cameraZ","Camera rotate",make, {
+mv.addItemType( "cameraZ","Animation: Camera rotate",make, {
   label:"extra",
   guionce:true,
-  title_ru: "Поворот камеры",
-  cat: "camera"
+  title_ru: "Поворот камеры"
 } );
 
 }

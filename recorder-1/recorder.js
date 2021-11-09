@@ -2,7 +2,7 @@
 // надо делать мультик - сделаем полет камеры
 
 export default function setup( vz ) {
-  vz.addItemType( "rec1","Camera: Camera recorder-player (api)", function( opts ) {
+  vz.addItemType( "rec1","Animation: Camera trajectory", function( opts ) {
     return create( vz, opts );
   } );
 }
